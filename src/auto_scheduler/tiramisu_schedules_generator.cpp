@@ -1115,9 +1115,11 @@ namespace tiramisu::auto_scheduler
                         optim_info.nb_l = 2;
                         optim_info.l0 = new_node->depth;
                         optim_info.l1 = new_node->depth + 1;
+                        optim_info.l2 = 0;
                         optim_info.l0_fact = std::get<0>(param);
                         optim_info.l1_fact = std::get<1>(param);
-
+                        optim_info.l2_fact = 0;
+                        optim_info.l3_fact = 1;
                         std::vector<std::vector<int>> matrix(depth);
                         for (int l = 0; l < matrix.size(); l++)
                         {
@@ -1142,9 +1144,10 @@ namespace tiramisu::auto_scheduler
                             // This skewing would cause the increment to be !=1 which is not supported by Tiramisu.
                             // We modify the skewing matrix so that we can still apply skewing.
                             std::vector<int> solutions = get_skew_params(optim_info.l0_fact, optim_info.l1_fact);
-
-                            matrix.at(optim_info.l1).at(optim_info.l1) = solutions.at(1);
-                            matrix.at(optim_info.l1).at(optim_info.l1 - 1) = solutions.at(0);
+                            optim_info.l2_fact = solutions.at(0);
+                            optim_info.l3_fact = solutions.at(1);
+                            matrix.at(optim_info.l1).at(optim_info.l1 - 1) = optim_info.l2_fact;
+                            matrix.at(optim_info.l1).at(optim_info.l1) = optim_info.l3_fact;
                         }
 
                         optim_info.matrix = matrix;
@@ -1172,8 +1175,11 @@ namespace tiramisu::auto_scheduler
                         optim_info.nb_l = 2;
                         optim_info.l0 = new_node->depth;
                         optim_info.l1 = new_node->depth + 1;
+                        optim_info.l2 = 0;
                         optim_info.l0_fact = std::get<0>(param);
                         optim_info.l1_fact = std::get<1>(param);
+                        optim_info.l2_fact = 0;
+                        optim_info.l3_fact = 1;
 
                         std::vector<std::vector<int>> matrix(depth);
                         for (int l = 0; l < matrix.size(); l++)
@@ -1199,9 +1205,10 @@ namespace tiramisu::auto_scheduler
                             // This skewing would cause the increment to be !=1 which is not supported by Tiramisu.
                             // We modify the skewing matrix so that we can still apply skewing.
                             std::vector<int> solutions = get_skew_params(optim_info.l0_fact, optim_info.l1_fact);
-
-                            matrix.at(optim_info.l1).at(optim_info.l1) = solutions.at(1);
-                            matrix.at(optim_info.l1).at(optim_info.l1 - 1) = solutions.at(0);
+                            optim_info.l2_fact = solutions.at(0);
+                            optim_info.l3_fact = solutions.at(1);
+                            matrix.at(optim_info.l1).at(optim_info.l1 - 1) = optim_info.l2_fact;
+                            matrix.at(optim_info.l1).at(optim_info.l1) = optim_info.l3_fact;
                         }
                         optim_info.matrix = matrix;
                         optim_info.comps = involved_computations_skew;
@@ -1228,9 +1235,11 @@ namespace tiramisu::auto_scheduler
                         optim_info.nb_l = 2;
                         optim_info.l0 = new_node->depth;
                         optim_info.l1 = new_node->depth + 1;
+                        optim_info.l2 = 0;
                         optim_info.l0_fact = std::get<0>(param);
                         optim_info.l1_fact = std::get<1>(param);
-
+                        optim_info.l2_fact = 0;
+                        optim_info.l3_fact = 1;
                         if ((optim_info.l0 > 0) && (optim_info.l1 > 0))
                         { // require loop reversal for correctness
                             optim_info.l2_fact = -1;
@@ -1259,8 +1268,10 @@ namespace tiramisu::auto_scheduler
                             // This skewing would cause the increment to be !=1 which is not supported by Tiramisu.
                             // We modify the skewing matrix so that we can still apply skewing.
                             std::vector<int> solutions = get_skew_params(optim_info.l0_fact, optim_info.l1_fact);
-                            matrix.at(optim_info.l1).at(optim_info.l1) = solutions.at(1);
-                            matrix.at(optim_info.l1).at(optim_info.l1 - 1) = solutions.at(0);
+                            optim_info.l2_fact = solutions.at(0);
+                            optim_info.l3_fact = solutions.at(1);
+                            matrix.at(optim_info.l1).at(optim_info.l1 - 1) = optim_info.l2_fact;
+                            matrix.at(optim_info.l1).at(optim_info.l1) = optim_info.l3_fact;
                         }
                         optim_info.matrix = matrix;
 
@@ -1295,6 +1306,7 @@ namespace tiramisu::auto_scheduler
                         optim_info.nb_l = 2;
                         optim_info.l0 = new_node->depth;
                         optim_info.l1 = new_node->depth + 1;
+                        optim_info.l2 = 0;
                         optim_info.l0_fact = std::get<0>(param);
                         optim_info.l1_fact = std::get<1>(param);
                         optim_info.l2_fact = std::get<2>(param);
@@ -1332,6 +1344,7 @@ namespace tiramisu::auto_scheduler
             }
             ast.recover_isl_states();
         }
+        ast.stage_isl_states();
         bool explre_3d_solver_skew = true;
         if (shared_nodes.size() > 2)
         {

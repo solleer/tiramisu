@@ -427,3 +427,4 @@ endfunction()
 endif() #WITH_TUTORIALS
 
 
+# add_subdirectory(tutorials/tutorial_autoscheduler)
