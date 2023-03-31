@@ -22,3 +22,5 @@ __pycache__
 cmake-build-debug/
 cmake-build-autoscheduler/
 .vscode
+tmp
+install
